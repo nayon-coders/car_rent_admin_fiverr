@@ -72,7 +72,7 @@ class LineChartCard extends StatelessWidget {
     80: 'Sep',
     90: 'Oct',
     100: 'Nov',
-    110: 'Dec',
+    5: 'Dec',
   };
 
   @override

@@ -1,7 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dashboard/widgets/app_toast.dart';
+import 'package:flutter_dashboard/widgets/image_controller.dart';
 import 'package:flutter_dashboard/widgets/loding.dart';
 
 class UserController{
@@ -41,6 +44,38 @@ class UserController{
 
     return Stream.empty();
 
+  }
+  
+  
+  //get social media
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getSocialMedia(){
+    return _firestore.collection("social_media").snapshots();
+  }
+
+  //add social media
+  static Future<void> addSocialMedia({required String name, required String url, required Uint8List image, required BuildContext context }) async{
+    appLoading(context);
+    //image convert
+    var convertedImage;
+    if(image.isEmpty){
+      Navigator.pop(context);
+      AppToast.showToast("Please select an image", Colors.red);
+      return;
+    }else{
+      ImageController.uploadImageToFirebaseStorage(image, "social_media").then((value) {
+        convertedImage = value;
+      });
+    }
+
+    await _firestore.collection('social_media').add({
+      'name': name,
+      'url': url,
+      'image': convertedImage
+    }).then((value) {
+      Navigator.pop(context);
+      Navigator.pop(context);
+      AppToast.showToast("Social Media has been added", Colors.green);
+    });
   }
 
 }

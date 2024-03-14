@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dashboard/firebase/authController.dart';
+import 'package:flutter_dashboard/pages/setting/widgets/banner_upload_view.dart';
 import 'package:flutter_dashboard/pages/setting/widgets/social_meida_view.dart';
 import 'package:flutter_dashboard/widgets/app_input.dart';
 import 'package:flutter_dashboard/widgets/app_text.dart';
@@ -65,63 +66,65 @@ class _SettingState extends State<Setting> {
                       height: Responsive.isMobile(context) ? 5 : 18,
                     ),
                     _height(context),
+                    SizedBox(
+                      height: 300,
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            appTitle(text: "Change admin password", context: context),
+                            _height(context),
+                            AppInput(
+                              hintText: "Password",
+                              controller: _password,
+                              title: "New Password",
+                              validator: (v){
+                                if(v!.isEmpty){
+                                  return "Password is required";
+                                }
+                                if(v.length < 6){
+                                  return "Password must be at least 6 characters";
+                                }
+
+                              },
+                            ),
+                            SizedBox(height: 15,),
+                            AppInput(
+                                hintText: "Confirm Password",
+                                controller: _cPassword,
+                                title: "Confirm Password",
+                                validator: (v){
+                                  if(v!.isEmpty){
+                                    return "Password is required";
+                                  }
+                                  if(v != _password.text){
+                                    return "Password does not match";
+                                  }
+                                }
+                            ),
+                            SizedBox(height: 30,),
+                            ElevatedButton(
+                                onPressed: (){
+                                  if(_formKey.currentState!.validate()){
+                                    AuthController.changePassword(context: context, pass: _password.text);
+                                  }
+                                },
+                                child: Text("Change password")
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    _height(context),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: SizedBox(
-                            height: 300,
-                            child: Form(
-                              key: _formKey,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  appTitle(text: "Change admin password", context: context),
-                                  _height(context),
-                                  AppInput(
-                                    hintText: "Password",
-                                    controller: _password,
-                                    title: "New Password",
-                                    validator: (v){
-                                      if(v!.isEmpty){
-                                        return "Password is required";
-                                      }
-                                      if(v.length < 6){
-                                        return "Password must be at least 6 characters";
-                                      }
 
-                                    },
-                                  ),
-                                  SizedBox(height: 15,),
-                                  AppInput(
-                                    hintText: "Confirm Password",
-                                    controller: _cPassword,
-                                    title: "Confirm Password",
-                                    validator: (v){
-                                      if(v!.isEmpty){
-                                        return "Password is required";
-                                      }
-                                      if(v != _password.text){
-                                        return "Password does not match";
-                                      }
-                                    }
-                                  ),
-                                  SizedBox(height: 30,),
-                                  ElevatedButton(
-                                      onPressed: (){
-                                        if(_formKey.currentState!.validate()){
-                                          AuthController.changePassword(context: context, pass: _password.text);
-                                        }
-                                      },
-                                      child: Text("Change password")
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                        Expanded(child: BannerAddView()),
+
                         SizedBox(width: 20,),
                          Expanded(
                              child: SocialMediaView()

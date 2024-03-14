@@ -26,6 +26,8 @@ class _SocialMediaViewState extends State<SocialMediaView> {
   Uint8List? _unitCarImage;
 
   final _formKey = GlobalKey<FormState>();
+  var image;
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class _SocialMediaViewState extends State<SocialMediaView> {
               appTitle(text: "Social Media", context: context),
               ElevatedButton(
                 onPressed: (){
-                  _showMyDialog(context);
+                  _showMyDialog(context, null);
                 },
                 child: Text("Add New", style: TextStyle(color: Colors.white),),
                 style: ElevatedButton.styleFrom(primary: Colors.blue),
@@ -71,15 +73,12 @@ class _SocialMediaViewState extends State<SocialMediaView> {
                               child: Row(
                                 children: [
                                   IconButton(
-                                    onPressed: (){},
+                                    onPressed: ()=>_showMyDialog(context, data),
                                     icon: Icon(Icons.edit, color: Colors.blue,),
                                   ),
                                   IconButton(
                                     onPressed: (){
-                                      //show alert dialog
-                                      AppAlertDialog.showAlertDialog(context, "Are you sure you want to delete this social media?", (){
-                                        UserController.deleteSocialMedia(data.id, context);
-                                      });
+                                   _showDeletePopup(data);
                                     },
                                     icon: Icon(Icons.delete, color: Colors.red,),
                                   ),
@@ -102,13 +101,53 @@ class _SocialMediaViewState extends State<SocialMediaView> {
     );
   }
 
-  Future<void> _showMyDialog(context) async {
+  //delete popup
+  Future<void> _showDeletePopup(data) async {
+
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Add social media link'),
+          title: Text('Are you sure?'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Are you sure? Do you want to delete this social media?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Yes'),
+              onPressed: () {
+                 UserController.deleteSocialMedia(data.id, context);
+              },
+            ),
+            TextButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showMyDialog(context, data) async {
+    if(data != null){
+      _nameController.text = data["name"];
+      _urlController.text = data["url"];
+      image = data["image"];
+    }
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(data != null ? "Edit social media" : "Add Social media links"),
           content: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
               return Form(
@@ -153,22 +192,33 @@ class _SocialMediaViewState extends State<SocialMediaView> {
                           ),
                           child: _unitCarImage != null
                               ? Image.memory(_unitCarImage!, fit: BoxFit.contain,)
-                              : Center(child: Icon(Icons.cloud_upload, color: Colors.black, size: 50,),),
+                              : image != null ? AppNetworkImage(imageUrl: image) : Center(child: Icon(Icons.cloud_upload, color: Colors.black, size: 50,),),
                         ),
                       ),
                       SizedBox(height: 30,),
                       ElevatedButton(
                           onPressed: (){
                             if(_formKey.currentState!.validate()){
-                              UserController.addSocialMedia(name: _nameController.text, url: _urlController.text, image: _unitCarImage!, context: context).then((value){
-                                _nameController.clear();
-                                _urlController.clear();
-                                _unitCarImage = null;
+                              if(data != null){
+                                UserController.editSocialMedia(name: _nameController.text, url: _urlController.text, image: _unitCarImage, docId: data.id, context: context).then((value){
+                                  _nameController.clear();
+                                  _urlController.clear();
+                                  if(_unitCarImage != null){
+                                    _unitCarImage = null;
+                                  }
+                                });
+                              }else{
+                                UserController.addSocialMedia(name: _nameController.text, url: _urlController.text, image: _unitCarImage!, context: context).then((value){
+                                  _nameController.clear();
+                                  _urlController.clear();
+                                  _unitCarImage = null;
 
-                              });
+                                });
+                              }
+
                             }
                           },
-                          child: Text("Add")
+                          child: Text("${data != null ? "Update" : "Add"}", style: TextStyle(color: Colors.white),),
                       )
                     ],
                   ),

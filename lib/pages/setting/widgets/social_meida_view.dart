@@ -5,6 +5,7 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:flutter_dashboard/firebase/user_controller.dart';
 import 'package:flutter_dashboard/widgets/app_input.dart';
+import 'package:flutter_dashboard/widgets/app_network_image.dart';
 
 import '../../../widgets/app_text.dart';
 
@@ -62,11 +63,28 @@ class _SocialMediaViewState extends State<SocialMediaView> {
                         itemBuilder: (context, index){
                           var data = snapshot.data!.docs[index]; //get data
                           return ListTile(
+                            leading: AppNetworkImage(imageUrl: "${data["image"]}", width: 50, height: 50,),
                             title: appText(text: "${data["name"]}", context: context),
                             subtitle: appText(text: "${data["url"]}", context: context),
-                            trailing: IconButton(
-                              onPressed: (){},
-                              icon: Icon(Icons.edit, color: Colors.blue,),
+                            trailing: SizedBox(
+                              width: 100,
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: (){},
+                                    icon: Icon(Icons.edit, color: Colors.blue,),
+                                  ),
+                                  IconButton(
+                                    onPressed: (){
+                                      //show alert dialog
+                                      AppAlertDialog.showAlertDialog(context, "Are you sure you want to delete this social media?", (){
+                                        UserController.deleteSocialMedia(data.id, context);
+                                      });
+                                    },
+                                    icon: Icon(Icons.delete, color: Colors.red,),
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         },
@@ -142,7 +160,12 @@ class _SocialMediaViewState extends State<SocialMediaView> {
                       ElevatedButton(
                           onPressed: (){
                             if(_formKey.currentState!.validate()){
-                              UserController.addSocialMedia(name: _nameController.text, url: _urlController.text, image: _unitCarImage!, context: context);
+                              UserController.addSocialMedia(name: _nameController.text, url: _urlController.text, image: _unitCarImage!, context: context).then((value){
+                                _nameController.clear();
+                                _urlController.clear();
+                                _unitCarImage = null;
+
+                              });
                             }
                           },
                           child: Text("Add")

@@ -62,19 +62,26 @@ class UserController{
       AppToast.showToast("Please select an image", Colors.red);
       return;
     }else{
-      ImageController.uploadImageToFirebaseStorage(image, "social_media").then((value) {
-        convertedImage = value;
+      ImageController.uploadImageToFirebaseStorage(image, "social_media").then((value) async{
+        await _firestore.collection('social_media').add({
+          'name': name,
+          'url': url,
+          'image': value
+        }).then((value) {
+          Navigator.pop(context);
+          Navigator.pop(context);
+          AppToast.showToast("Social Media has been added", Colors.green);
+        });
       });
     }
+  }
 
-    await _firestore.collection('social_media').add({
-      'name': name,
-      'url': url,
-      'image': convertedImage
-    }).then((value) {
+  //delete socail media
+  static Future<void> deleteSocialMedia(String docId, BuildContext context) async{
+    appLoading(context);
+    await _firestore.collection('social_media').doc(docId).delete().then((value) {
       Navigator.pop(context);
-      Navigator.pop(context);
-      AppToast.showToast("Social Media has been added", Colors.green);
+      AppToast.showToast("Social Media has been deleted", Colors.green);
     });
   }
 

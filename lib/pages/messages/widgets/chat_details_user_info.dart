@@ -15,10 +15,10 @@ class ChatDetailUserInfo extends StatelessWidget {
       leading: CircleAvatar(
         radius: 20,
         backgroundColor: Colors.white,
-        child: user!["profile"] != null ? AppNetworkImage(imageUrl: user!["profile"]!): Icon(Icons.person, color: Colors.black,),
+        child: user!["car"]["image"] != null ? AppNetworkImage(imageUrl: user!["car"]["image"]!): Icon(Icons.person, color: Colors.black,),
       ),
-      title:Text("${user!["name"]}"),
-      subtitle: Text("${user!["email"]}",
+      title:Text("Car Name: ${user!["car"]["name"]}"),
+      subtitle: Text("User Name: ${user!["user"]["name"]}",
         style: TextStyle(
             color:  Colors.grey
         ),

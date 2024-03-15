@@ -55,7 +55,7 @@ class _UserListChatState extends State<UserListChat> {
                   // )
                 ],
               ),
-              title:Text("${widget.snapshot!["receiver"]["name"]}"),
+              title:Text("${widget.snapshot!["car"]["name"]}"),
               subtitle: Text("${widget.snapshot!["message"].toList().last["message"]}",
                 style: TextStyle(
                     color:widget.snapshot!["message"].toList().last["read"] == true ? Colors.grey : Colors.white

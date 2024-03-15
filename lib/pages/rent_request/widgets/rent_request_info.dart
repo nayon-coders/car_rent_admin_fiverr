@@ -91,7 +91,7 @@ Future<void> showRentRequestInfo({required BuildContext context, required Docume
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          MessagingController.sendMessage(message: "Hello", receiverEmail: document["user"]["email"] ?? "", user: document["user"] as Map<String, dynamic>,).then((value) {
+                          MessagingController.sendMessage(message: "Hello", receiverEmail: document["user"]["email"] ?? "", user: document["user"] as Map<String, dynamic>, car: document["car"],).then((value) {
                             Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard(pageIndex: 2,), settings: RouteSettings(name: 'messaging')));
                           });
                         },

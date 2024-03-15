@@ -9,38 +9,39 @@ class MessagingController {
   static final _auth = FirebaseAuth.instance;
   static final _firestore = FirebaseFirestore.instance;
 
-  static Future<void> sendMessage({required String message, required String receiverEmail, required Map<String, dynamic> user}) async {
+  static Future<void> sendMessage({String? docId, required String message, required String receiverEmail, required Map<String, dynamic> user, required Map<String, dynamic> car}) async {
     var sender= {};
    _firestore.collection('users').doc(_auth.currentUser!.email).get().then((admin) {
 
      //check messages is exist or not
-      _firestore.collection('messages').doc(receiverEmail).get().then((value) {
+      _firestore.collection('messages').doc(docId).get().then((value) {
         if(value.exists){
           //if exist then update the message
-          _firestore.collection('messages').doc(receiverEmail).update({
+          _firestore.collection('messages').doc(docId).update({
             'message': FieldValue.arrayUnion([
               {
-                'senderId': _auth.currentUser!.email,
-                'receiverId': receiverEmail,
+                'sender': _auth.currentUser!.email,
+                'receiver': receiverEmail,
                 'message': message,
                 'timestamp': DateFormat('yyyy-MM-dd – hh:mm:ss').format(DateTime.now()),
-                "read": true,
+                "read": false,
               }
             ]),
             'timestamp': FieldValue.serverTimestamp(),
           });
         }else{
           //if not exist then create new message
-          _firestore.collection('messages').doc(receiverEmail).set({
-            'receiver' : user,
-            "sender" : admin.data(),
+          _firestore.collection('messages').add({
+            'user' : user,
+            "admin" : admin.data(),
+            "car" : car,
             'message': [
               {
-                'senderId': _auth.currentUser!.email,
-                'receiverId': receiverEmail,
+                'sender': _auth.currentUser!.email,
+                'receiver': receiverEmail,
                 'message': message,
                 'timestamp': DateFormat('yyyy-MM-dd – hh:mm:ss').format(DateTime.now()),
-                "read": true,
+                "read": false,
               }
             ],
             'timestamp': FieldValue.serverTimestamp(),

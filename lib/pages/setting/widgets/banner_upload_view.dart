@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
@@ -16,14 +17,21 @@ class BannerAddView extends StatefulWidget {
 class _BannerAddViewState extends State<BannerAddView> {
 
   Uint8List? _unitCarImage;
+  final statusController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
   var image;
+  String selectedOption = "Active";
 
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(width: 1, color: Colors.white)
+      ),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,7 +54,7 @@ class _BannerAddViewState extends State<BannerAddView> {
               SizedBox(
                   height: 300,
                   child: StreamBuilder(
-                      stream: UserController.getSocialMedia(),
+                      stream: UserController.getBanner(),
                       builder: (context, snapshot){
                         if(snapshot.connectionState == ConnectionState.waiting){
                           return Center(child: CircularProgressIndicator(),);
@@ -57,15 +65,16 @@ class _BannerAddViewState extends State<BannerAddView> {
                             itemBuilder: (context, index){
                               var data = snapshot.data!.docs[index]; //get data
                               return ListTile(
-                                leading: AppNetworkImage(imageUrl: "${data["image"]}", width: 50, height: 50,),
-                                title: appText(text: "${data["name"]}", context: context),
-                                subtitle: appText(text: "${data["url"]}", context: context),
+                                leading: AppNetworkImage(imageUrl: "${data["url"]}", width: 50, height: 50,),
+                                title: Center(child: Text(data["status"].toString(), style: TextStyle(color: data["status"] == "Active" ? Colors.green : Colors.red,),)),
                                 trailing: SizedBox(
                                   width: 100,
                                   child: Row(
                                     children: [
                                       IconButton(
-                                        onPressed: ()=>_showMyDialog(context, data),
+                                        onPressed: (){
+                                          _showMyDialog(context, data);
+                                        },
                                         icon: Icon(Icons.edit, color: Colors.blue,),
                                       ),
                                       IconButton(
@@ -106,7 +115,7 @@ class _BannerAddViewState extends State<BannerAddView> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Are you sure? Do you want to delete this social media?'),
+                Text('Are you sure? Do you want to delete this Banner?'),
               ],
             ),
           ),
@@ -114,7 +123,7 @@ class _BannerAddViewState extends State<BannerAddView> {
             TextButton(
               child: Text('Yes'),
               onPressed: () {
-                UserController.deleteSocialMedia(data.id, context);
+                UserController.deleteBanner(data.id, context);
               },
             ),
             TextButton(
@@ -131,7 +140,8 @@ class _BannerAddViewState extends State<BannerAddView> {
 
   Future<void> _showMyDialog(context, data) async {
     if(data != null){
-      image = data["image"];
+      image = data["url"];
+      selectedOption = data["status"];
     }
     return showDialog<void>(
       context: context,
@@ -146,6 +156,41 @@ class _BannerAddViewState extends State<BannerAddView> {
                   child: SingleChildScrollView(
                     child: ListBody(
                       children: <Widget>[
+                        Text("Status *"),
+                        SizedBox(height: 10,),
+                        Row(
+                          children: <Widget>[
+                            Radio(
+                              value: "Active",
+                              groupValue: selectedOption,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedOption = value!;
+                                });
+                              },
+                            ),
+                            Text('Active',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Radio(
+                              value: "Deactivate",
+                              groupValue: selectedOption,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedOption = value!;
+                                });
+                              },
+                            ),
+                            const Text('Deactivate',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20,),
                         InkWell(
                           onTap: (){
                             setState(() {
@@ -154,7 +199,7 @@ class _BannerAddViewState extends State<BannerAddView> {
                           },
                           child: Container(
                             width: 100,
-                            height: 100,
+                            height: 200,
                             decoration: BoxDecoration(
                               color: Colors.grey,
                               borderRadius: BorderRadius.circular(10),
@@ -164,16 +209,22 @@ class _BannerAddViewState extends State<BannerAddView> {
                                 : image != null ? AppNetworkImage(imageUrl: image) : Center(child: Icon(Icons.cloud_upload, color: Colors.black, size: 50,),),
                           ),
                         ),
+                        SizedBox(height: 5,),
+                        Text("The best size for the image is 590X300 pixels. The maximum file size is 5MB.", style: TextStyle(fontSize: 12, color: Colors.red, fontStyle: FontStyle.italic),),
                         SizedBox(height: 30,),
                         ElevatedButton(
                           onPressed: (){
                             if(_formKey.currentState!.validate()){
                               if(data != null){
+                                UserController.editBanner(status: selectedOption, image: _unitCarImage, context: context, docId: data.id).then((value){
+                                  if(_unitCarImage != null){
+                                    _unitCarImage = null;
+                                  }
+                                });
 
                               }else{
-                                UserController.addBanner(status: "Active", image: _unitCarImage!, context: context).then((value){
+                                UserController.addBanner(status: selectedOption, image: _unitCarImage!, context: context).then((value){
                                   _unitCarImage = null;
-
                                 });
                               }
 

@@ -40,6 +40,7 @@ class _MessageBodyState extends State<MessageBody> {
   Widget build(BuildContext context) {
     return Expanded(
           child: Container(
+
             padding: EdgeInsets.all(10),
             height: MediaQuery
                 .of(context)
@@ -67,7 +68,7 @@ class _MessageBodyState extends State<MessageBody> {
                           }else if(snapshot.hasData) {
                             return  ListView(
                               children: [
-                                ChatDetailUserInfo(user: snapshot.data!.data()!["receiver"],),
+                                ChatDetailUserInfo(user: snapshot.data!.data() as Map<String, dynamic>,),
                                 SizedBox(height: 5,),
                                 Container(
                                   height: MediaQuery
@@ -80,104 +81,106 @@ class _MessageBodyState extends State<MessageBody> {
                                   ),
                                   child: Column(
                                     children: [
-                                      SizedBox(
-                                          height: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .height * 0.6,
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.5,
-                                          child: ListView.builder(
-                                            controller: _controller,
+                                      Expanded(
+                                        child: SizedBox(
+                                            // height: MediaQuery
+                                            //     .of(context)
+                                            //     .size
+                                            //     .height * 0.5,
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width * 0.5,
+                                            child: ListView.builder(
+                                              controller: _controller,
 
 
-                                            itemCount: snapshot.data!.data()!["message"].length,
-                                            itemBuilder: (_, index) {
-                                              var msg = snapshot.data!.data()!["message"].toList()[index];
-                                              return Column(
-                                                children: [
-                                                  msg["senderId"] == _auth.currentUser!.email
-                                                      ?  Align(
-                                                        alignment: Alignment.centerRight,
-                                                        child: SizedBox(
-                                                          //height: MediaQuery.of(context).size.height*0.5,
-                                                          width: MediaQuery.of(context).size.width * 0.3,
-                                                          child: ListTile(
-                                                            title: Container(
-                                                                margin: EdgeInsets.only(bottom: 8),
-                                                                padding: EdgeInsets.only(left: 15, right: 15,top: 5, bottom: 5),
-                                                                decoration: BoxDecoration(
-                                                                    color: Colors.blue,
-                                                                    borderRadius: BorderRadius.circular(10)
-                                                                ),
-                                                                child: Text("${msg["message"]}",
-                                                                  textAlign: TextAlign.right,
-                                                                  style: TextStyle(
-                                                                      color: Colors.white,
-                                                                      fontSize: 15
+                                              itemCount: snapshot.data!.data()!["message"].length,
+                                              itemBuilder: (_, index) {
+                                                var msg = snapshot.data!.data()!["message"].toList()[index];
+                                                return Column(
+                                                  children: [
+                                                    msg["sender"] == _auth.currentUser!.email
+                                                        ?  Align(
+                                                          alignment: Alignment.centerRight,
+                                                          child: SizedBox(
+                                                            //height: MediaQuery.of(context).size.height*0.5,
+                                                            width: MediaQuery.of(context).size.width * 0.3,
+                                                            child: ListTile(
+                                                              title: Container(
+                                                                  margin: EdgeInsets.only(bottom: 8),
+                                                                  padding: EdgeInsets.only(left: 15, right: 15,top: 5, bottom: 5),
+                                                                  decoration: BoxDecoration(
+                                                                      color: Colors.blue,
+                                                                      borderRadius: BorderRadius.circular(10)
                                                                   ),
-                                                                )
-                                                            ),
-                                                            subtitle: Text("${msg["timestamp"]}",
-                                                              textAlign: TextAlign.right,
-                                                              style: TextStyle(
-                                                                  color: Colors.grey
+                                                                  child: Text("${msg["message"]}",
+                                                                    textAlign: TextAlign.right,
+                                                                    style: TextStyle(
+                                                                        color: Colors.white,
+                                                                        fontSize: 15
+                                                                    ),
+                                                                  )
+                                                              ),
+                                                              subtitle: Text("${msg["timestamp"]}",
+                                                                textAlign: TextAlign.right,
+                                                                style: TextStyle(
+                                                                    color: Colors.grey
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
-                                                        ),
-                                                      )
-                                                      :  Align(
-                                                    alignment: Alignment.centerLeft,
-                                                    child: SizedBox(
-                                                      //height: MediaQuery.of(context).size.height*0.5,
-                                                      width: MediaQuery
-                                                          .of(context)
-                                                          .size
-                                                          .width * 0.3,
-                                                      child: ListTile(
-                                                        leading: CircleAvatar(
-                                                          radius: 15,
-                                                          backgroundColor: Colors.white,
-                                                          child: Icon(Icons.person,
-                                                            color: Colors.black,),
-                                                        ),
-                                                        title: Container(
-                                                            margin: EdgeInsets.only(
-                                                                bottom: 8),
-                                                            padding: EdgeInsets.only(left: 15,
-                                                                right: 15,
-                                                                top: 5,
-                                                                bottom: 5),
-                                                            decoration: BoxDecoration(
-                                                                color: Colors.white,
-                                                                borderRadius: BorderRadius
-                                                                    .circular(10)
-                                                            ),
-                                                            child: Text("${msg["message"]}",
-                                                              style: TextStyle(
-                                                                  color: Colors.black,
-                                                                  fontSize: 15
+                                                        )
+                                                        :  Align(
+                                                      alignment: Alignment.centerLeft,
+                                                      child: SizedBox(
+                                                        //height: MediaQuery.of(context).size.height*0.5,
+                                                        width: MediaQuery
+                                                            .of(context)
+                                                            .size
+                                                            .width * 0.3,
+                                                        child: ListTile(
+                                                          leading: CircleAvatar(
+                                                            radius: 15,
+                                                            backgroundColor: Colors.white,
+                                                            child: Icon(Icons.person,
+                                                              color: Colors.black,),
+                                                          ),
+                                                          title: Container(
+                                                              margin: EdgeInsets.only(
+                                                                  bottom: 8),
+                                                              padding: EdgeInsets.only(left: 15,
+                                                                  right: 15,
+                                                                  top: 5,
+                                                                  bottom: 5),
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors.white,
+                                                                  borderRadius: BorderRadius
+                                                                      .circular(10)
                                                               ),
-                                                            )
-                                                        ),
-                                                        subtitle: Text("${msg["timestamp"]}",
-                                                          style: TextStyle(
-                                                              color: Colors.grey
+                                                              child: Text("${msg["message"]}",
+                                                                style: TextStyle(
+                                                                    color: Colors.black,
+                                                                    fontSize: 15
+                                                                ),
+                                                              )
+                                                          ),
+                                                          subtitle: Text("${msg["timestamp"]}",
+                                                            style: TextStyle(
+                                                                color: Colors.grey
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  )
-                                                ],
-                                              );
-                                            },
-                                          )
+                                                    )
+                                                  ],
+                                                );
+                                              },
+                                            )
+                                        ),
                                       ),
                                       Container(
-                                        padding: EdgeInsets.all(10),
+                                        padding: EdgeInsets.all(7),
                                         child: Row(
                                           children: [
                                             Expanded(
@@ -206,8 +209,10 @@ class _MessageBodyState extends State<MessageBody> {
                                               onTap: ()async{
                                                 await MessagingController.sendMessage(
                                                     message: _messageController.text,
-                                                    receiverEmail: snapshot.data!.data()!["receiver"]["email"],
-                                                    user: snapshot.data!.data()!["sender"]
+                                                    receiverEmail: snapshot.data!.data()!["user"]["email"],
+                                                    user: snapshot.data!.data()!["user"],
+                                                  car: snapshot.data!.data()!["car"],
+                                                  docId: widget.docIS
                                                 ).then((value) {
                                                   _messageController.clear();
                                                   print("Message sent");

@@ -32,6 +32,11 @@ class _SocialMediaViewState extends State<SocialMediaView> {
   @override
   Widget build(BuildContext context) {
     return Container(
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(width: 1, color: Colors.white)
+        ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,

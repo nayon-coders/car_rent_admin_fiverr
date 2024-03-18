@@ -23,6 +23,7 @@ class _MessagesState extends State<Messages> {
 
   bool _openChat = false;
   String docId = "";
+  String status = '';
 
   @override
   Widget build(BuildContext context) {

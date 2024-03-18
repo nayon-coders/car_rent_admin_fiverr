@@ -203,9 +203,9 @@ class _RentRequestState extends State<RentRequest> {
                                                 DataCell(Text(document["user"]['name'])),
                                                 DataCell(Text(document['createdAt'])),
                                                 DataCell( Container(
-                                                    padding: EdgeInsets.all(3),
+                                                    padding: EdgeInsets.only(left: 10, right: 10, top: 4, bottom: 4),
                                                     decoration: BoxDecoration(
-                                                      color: document['status'] == "active" ? Colors.green :  document['status'] == "cancel" ? Colors.red : Colors.blue,
+                                                      color: document['status'] == "approved" ? Colors.green :  document['status'] == "cancel" ? Colors.red : Colors.blue,
                                                       borderRadius: BorderRadius.circular(5),
                                                     ),
                                                     child: Text(document['status'], style: TextStyle(color: Colors.white),)

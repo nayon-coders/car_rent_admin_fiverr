@@ -37,8 +37,7 @@ Future<void> showRentRequestInfo({required BuildContext context, required Docume
                           Text('Name: ${document["user"]['name'] ?? ""}'),
                           SizedBox(height: 5,),
                           Text('Email: ${document["user"]['email'] ?? ""}'),
-                          SizedBox(height: 5,),
-                          Text('Phone: ${document["user"]['phone'] ?? ""}'),
+
                         ],
                       ),
                     ),
@@ -57,16 +56,18 @@ Future<void> showRentRequestInfo({required BuildContext context, required Docume
                           SizedBox(height: 10,),
                           Text('Car: ${document['car']["name"]}'),
                           SizedBox(height: 5,),
-                          Text('Rent Type: '),
+                          Text('Request For: '),
                           SizedBox(height: 5,),
-                          for(var i in document["car"]["rent_type"])
-                            ListTile(
-                              title: Text(i["rent_type"]),
-                              trailing: Text(i["rent_price"]),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black54
                             ),
+                            child: ListTile(
+                              title: Text(document["rent_type"]["rent_type"]),
+                              trailing: Text(document["rent_type"]["rent_price"]),
+                            ),
+                          ),
 
-                          SizedBox(height: 5,),
-                          Text('Rent price: 1000'),
                         ],
                       ),
                     )
@@ -83,7 +84,7 @@ Future<void> showRentRequestInfo({required BuildContext context, required Docume
                 ),
                 SizedBox(height: 10,),
                 Text('Status: ${document["status"]}'),
-                SizedBox(height: 5,),
+                SizedBox(height: 8,),
                 Text('Date: ${document["createdAt"]}'),
                 SizedBox(height: 20,),
                 Row(
@@ -91,8 +92,13 @@ Future<void> showRentRequestInfo({required BuildContext context, required Docume
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          MessagingController.sendMessage(message: "Hello", receiverEmail: document["user"]["email"] ?? "", user: document["user"] as Map<String, dynamic>,).then((value) {
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard(pageIndex: 2,), settings: RouteSettings(name: 'messaging')));
+                          MessagingController.sendMessage(message: "Hello", receiverEmail: document["user"]["email"] ?? "", user: document["user"] as Map<String, dynamic>, docId: 'message_start', car: document["car"] as Map<String, dynamic>,).then((value) {
+
+                            print("this is messages === ${value}");
+                            if(value){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard(pageIndex: 2,), settings: RouteSettings(name: 'messaging')));
+
+                            }
                           });
                         },
                         child: Text('Start chat'),

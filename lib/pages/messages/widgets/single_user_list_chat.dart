@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dashboard/firebase/user_controller.dart';
+import 'package:flutter_dashboard/widgets/app_network_image.dart';
 
 import 'message_body.dart';
 
@@ -38,7 +39,7 @@ class _UserListChatState extends State<UserListChat> {
                   CircleAvatar(
                     radius: 20,
                     backgroundColor: Colors.white,
-                    child: Icon(Icons.person, color: Colors.black,),
+                    child: AppNetworkImage(imageUrl: widget.snapshot["car"]["image"], width: 40, height: 40,),
                   ),
                   // Positioned(
                   //   bottom: 0,
@@ -55,7 +56,7 @@ class _UserListChatState extends State<UserListChat> {
                   // )
                 ],
               ),
-              title:Text("${widget.snapshot!["receiver"]["name"]}"),
+              title:Text("${widget.snapshot!["car"]["name"]}"),
               subtitle: Text("${widget.snapshot!["message"].toList().last["message"]}",
                 style: TextStyle(
                     color:widget.snapshot!["message"].toList().last["read"] == true ? Colors.grey : Colors.white

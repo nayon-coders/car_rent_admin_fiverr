@@ -3,10 +3,10 @@ import 'package:flutter_dashboard/widgets/app_network_image.dart';
 
 
 class ChatDetailUserInfo extends StatelessWidget {
-  final Map<String, dynamic> user;
+  final Map<String, dynamic> data;
   const ChatDetailUserInfo({
     super.key,
-    required this.user
+    required this.data
   });
 
   @override
@@ -15,10 +15,10 @@ class ChatDetailUserInfo extends StatelessWidget {
       leading: CircleAvatar(
         radius: 20,
         backgroundColor: Colors.white,
-        child: user!["profile"] != null ? AppNetworkImage(imageUrl: user!["profile"]!): Icon(Icons.person, color: Colors.black,),
+        child: data!["car"]["image"] != null ? AppNetworkImage(imageUrl: data!["car"]["image"]!): Icon(Icons.person, color: Colors.black,),
       ),
-      title:Text("${user!["name"]}"),
-      subtitle: Text("${user!["email"]}",
+      title:Text("Car Name: ${data["car"]["name"]}"),
+      subtitle: Text("User Name: ${data!["user"]["name"]}",
         style: TextStyle(
             color:  Colors.grey
         ),

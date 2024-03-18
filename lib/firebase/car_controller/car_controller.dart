@@ -154,16 +154,24 @@ class CarController{
       //add car to firestore
       await _firestore.collection("rent_request").doc(docId).update({"status": status}).then((value) {
         var carStatus = status == "approved" ? "rent" : "active";
-         _firestore.collection("cars").doc(carId).update({"status": carStatus}).then((value) {
-          AppToast.showToast("Car request status has been updated.", Colors.green);
-          Navigator.pop(context);
-          Navigator.pop(context);
-        });
 
+        //get all car
+        _firestore.collection("cars").get().then((value) {
+          for(var i in value.docs){
+            if(i["id"] == carId){
+              _firestore.collection("cars").doc(i.id).update({"status" : carStatus}).then((value) {
+                AppToast.showToast("Car request status has been updated.", Colors.green);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              });
+            }
+          }
+        });
       });
       //add car image to firebase storage
       return true;
     }catch(e){
+      print("error === ${e}");
       return false;
     }
   }

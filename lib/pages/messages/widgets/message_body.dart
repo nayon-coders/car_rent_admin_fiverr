@@ -41,6 +41,7 @@ class _MessageBodyState extends State<MessageBody> {
   Widget build(BuildContext context) {
     return Expanded(
           child: Container(
+
             padding: EdgeInsets.all(10),
             height: MediaQuery
                 .of(context)
@@ -68,6 +69,7 @@ class _MessageBodyState extends State<MessageBody> {
                           }else if(snapshot.hasData) {
                             return  ListView(
                               children: [
+<<<<<<< HEAD
                                 ChatDetailUserInfo(data: snapshot.data!.data()!,),
                                 SizedBox(height: 5,),
                                 // Row(
@@ -96,6 +98,9 @@ class _MessageBodyState extends State<MessageBody> {
                                 // SizedBox(height: 5,),
                                 //show request status
 
+=======
+                                ChatDetailUserInfo(user: snapshot.data!.data() as Map<String, dynamic>,),
+>>>>>>> 4cb95922c8c2af836dbf1a09d30ff8f853048f11
                                 SizedBox(height: 5,),
                                 Container(
                                   padding: EdgeInsets.all(10),
@@ -107,6 +112,7 @@ class _MessageBodyState extends State<MessageBody> {
                                       color: Colors.grey.shade900,
                                       borderRadius: BorderRadius.circular(10)
                                   ),
+<<<<<<< HEAD
                                   child:  ListView.builder(
                                     controller: _controller,
                                     itemCount: snapshot.data!.data()!["message"].length,
@@ -231,6 +237,147 @@ class _MessageBodyState extends State<MessageBody> {
                                             print("Message sent");
                                             _controller.jumpTo(_controller.position.maxScrollExtent);
                                           });
+=======
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: SizedBox(
+                                            // height: MediaQuery
+                                            //     .of(context)
+                                            //     .size
+                                            //     .height * 0.5,
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width * 0.5,
+                                            child: ListView.builder(
+                                              controller: _controller,
+
+
+                                              itemCount: snapshot.data!.data()!["message"].length,
+                                              itemBuilder: (_, index) {
+                                                var msg = snapshot.data!.data()!["message"].toList()[index];
+                                                return Column(
+                                                  children: [
+                                                    msg["sender"] == _auth.currentUser!.email
+                                                        ?  Align(
+                                                          alignment: Alignment.centerRight,
+                                                          child: SizedBox(
+                                                            //height: MediaQuery.of(context).size.height*0.5,
+                                                            width: MediaQuery.of(context).size.width * 0.3,
+                                                            child: ListTile(
+                                                              title: Container(
+                                                                  margin: EdgeInsets.only(bottom: 8),
+                                                                  padding: EdgeInsets.only(left: 15, right: 15,top: 5, bottom: 5),
+                                                                  decoration: BoxDecoration(
+                                                                      color: Colors.blue,
+                                                                      borderRadius: BorderRadius.circular(10)
+                                                                  ),
+                                                                  child: Text("${msg["message"]}",
+                                                                    textAlign: TextAlign.right,
+                                                                    style: TextStyle(
+                                                                        color: Colors.white,
+                                                                        fontSize: 15
+                                                                    ),
+                                                                  )
+                                                              ),
+                                                              subtitle: Text("${msg["timestamp"]}",
+                                                                textAlign: TextAlign.right,
+                                                                style: TextStyle(
+                                                                    color: Colors.grey
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        )
+                                                        :  Align(
+                                                      alignment: Alignment.centerLeft,
+                                                      child: SizedBox(
+                                                        //height: MediaQuery.of(context).size.height*0.5,
+                                                        width: MediaQuery
+                                                            .of(context)
+                                                            .size
+                                                            .width * 0.3,
+                                                        child: ListTile(
+                                                          leading: CircleAvatar(
+                                                            radius: 15,
+                                                            backgroundColor: Colors.white,
+                                                            child: Icon(Icons.person,
+                                                              color: Colors.black,),
+                                                          ),
+                                                          title: Container(
+                                                              margin: EdgeInsets.only(
+                                                                  bottom: 8),
+                                                              padding: EdgeInsets.only(left: 15,
+                                                                  right: 15,
+                                                                  top: 5,
+                                                                  bottom: 5),
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors.white,
+                                                                  borderRadius: BorderRadius
+                                                                      .circular(10)
+                                                              ),
+                                                              child: Text("${msg["message"]}",
+                                                                style: TextStyle(
+                                                                    color: Colors.black,
+                                                                    fontSize: 15
+                                                                ),
+                                                              )
+                                                          ),
+                                                          subtitle: Text("${msg["timestamp"]}",
+                                                            style: TextStyle(
+                                                                color: Colors.grey
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                );
+                                              },
+                                            )
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.all(7),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                                child: TextField(
+                                                  onTap: () {
+                                                    _controller.jumpTo(_controller.position.maxScrollExtent);
+                                                  },
+                                                  controller: _messageController,
+                                                  decoration: InputDecoration(
+                                                      hintText: "Type a message",
+                                                      hintStyle: TextStyle(
+                                                          color: Colors.grey
+                                                      ),
+                                                      border: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(
+                                                              10),
+                                                          borderSide: BorderSide.none
+                                                      ),
+                                                      filled: true,
+                                                      fillColor: Colors.grey.shade800
+                                                  ),
+                                                )
+                                            ),
+                                            SizedBox(width: 10,),
+                                            InkWell(
+                                              onTap: ()async{
+                                                await MessagingController.sendMessage(
+                                                    message: _messageController.text,
+                                                    receiverEmail: snapshot.data!.data()!["user"]["email"],
+                                                    user: snapshot.data!.data()!["user"],
+                                                  car: snapshot.data!.data()!["car"],
+                                                  docId: widget.docIS
+                                                ).then((value) {
+                                                  _messageController.clear();
+                                                  print("Message sent");
+                                                  _controller.jumpTo(_controller.position.maxScrollExtent);
+                                                });
+>>>>>>> 4cb95922c8c2af836dbf1a09d30ff8f853048f11
 
                                         },
                                         child: CircleAvatar(

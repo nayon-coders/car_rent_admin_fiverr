@@ -91,6 +91,7 @@ class _MessagesState extends State<Messages> {
                       ),
                       SizedBox(width: 10,),
                       MessageBody(docIS: docId,),
+                      SizedBox(height: 30,),
                     ],
                   )
 

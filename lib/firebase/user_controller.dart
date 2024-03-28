@@ -139,6 +139,11 @@ class UserController{
     }
   }
 
+  //get banner
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getBanner(){
+    return _firestore.collection("banner").snapshots();
+  }
+
   //delete banner
   static Future<void> deleteBanner(String docId, BuildContext context) async{
     appLoading(context);

@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: Color(0xFF171821),
           fontFamily: 'IBMPlexSans',
           brightness: Brightness.dark),
-      home: FirebaseAuth.instance.currentUser != null ? DashBoard(pageIndex: 2,) : Login(),
+      home: FirebaseAuth.instance.currentUser != null ? DashBoard(pageIndex: 0,) : Login(),
     );
   }
 }

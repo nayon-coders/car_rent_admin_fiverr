@@ -12,77 +12,73 @@ class MessagingController {
   static final _firestore = FirebaseFirestore.instance;
 
   static Future<bool> sendMessage({required String message, required String receiverEmail, required String docId, required Map<String, dynamic> user, required Map<String, dynamic> car}) async {
-    var sender= {};
-   try{
-     _firestore.collection('users').doc(_auth.currentUser!.email).get().then((admin) {
-
-       //check messages is exist or not
-       _firestore.collection('messages').doc(docId).get().then((value) {
-         if(value.exists){
-           //if exist then update the message
-           _firestore.collection('messages').doc(docId).update({
-             'message': FieldValue.arrayUnion([
-               {
-                 'sender': _auth.currentUser!.email,
-                 'receiver': receiverEmail,
-                 'message': message,
-                 'timestamp': DateFormat('yyyy-MM-dd – hh:mm:ss').format(DateTime.now()),
-                 "read": true,
-               }
-             ]),
-             'timestamp': FieldValue.serverTimestamp(),
-           }).then((value) {
-             //send push notification
-             NotificationController.sendNotification(
-                 title: "New Message",
-                 body: message,
-                 token: [user["token"]],
-                 car:  car
-             );
-
-             return true;
-
-           });
-         }else{
-           //if not exist then create new message
-           _firestore.collection('messages').doc(car["id"]).set({
-             'user' : user,
-             "admin" : admin.data(),
-             'car': car,
-             'message': [
-               {
-                 'sender': _auth.currentUser!.email,
-                 'receiver': receiverEmail,
-                 'message': message,
-                 'timestamp': DateFormat('yyyy-MM-dd – hh:mm:ss').format(DateTime.now()),
-                 "read": true,
-               }
-             ],
-
-             'timestamp': FieldValue.serverTimestamp(),
-           }).then((value) {
-             //send push notification
-             NotificationController.sendNotification(
-                 title: "New Message",
-                 body: message,
-                 token: [user["token"]],
+    var sender = {};
+    try {
+      _firestore.collection('users').doc(_auth.currentUser!.email).get().then((
+          admin) {
+        //check messages is exist or not
+        _firestore.collection('messages').doc(docId).get().then((value) {
+          if (value.exists) {
+            //if exist then update the message
+            _firestore.collection('messages').doc(docId).update({
+              'message': FieldValue.arrayUnion([
+                {
+                  'sender': _auth.currentUser!.email,
+                  'receiver': receiverEmail,
+                  'message': message,
+                  'timestamp': DateFormat('yyyy-MM-dd – hh:mm:ss').format(
+                      DateTime.now()),
+                  "read": true,
+                }
+              ]),
+              'timestamp': FieldValue.serverTimestamp(),
+            }).then((value) {
+              //send push notification
+              NotificationController.sendNotification(
+                  title: "New Message",
+                  body: message,
+                  token: [user["token"]],
                   car: car
-             );
-             return true;
-           });
-         }
+              );
 
-       });
-     });
-     return true;
+              return true;
+            });
+          } else {
+            //if not exist then create new message
+            _firestore.collection('messages').doc(car["id"]).set({
+              'user': user,
+              "admin": admin.data(),
+              'car': car,
+              'message': [
+                {
+                  'sender': _auth.currentUser!.email,
+                  'receiver': receiverEmail,
+                  'message': message,
+                  'timestamp': DateFormat('yyyy-MM-dd – hh:mm:ss').format(
+                      DateTime.now()),
+                  "read": true,
+                }
+              ],
 
-   }catch(e){
-     print("error is: ${e}");
-
-     return false;
-
-   }
-
+              'timestamp': FieldValue.serverTimestamp(),
+            }).then((value) {
+              //send push notification
+              NotificationController.sendNotification(
+                  title: "New Message",
+                  body: message,
+                  token: [user["token"]],
+                  car: car
+              );
+              return true;
+            });
+          }
+        });
+      });
+      return true;
+    } catch (e) {
+      print("error is: ${e}");
+      return false;
+    }
   }
 
   //get all messages
@@ -108,3 +104,4 @@ class MessagingController {
   }
 
 }
+

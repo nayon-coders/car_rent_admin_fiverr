@@ -93,11 +93,12 @@ Future<void> showRentRequestInfo({required BuildContext context, required Docume
                       child: ElevatedButton(
                         onPressed: () {
                           MessagingController.sendMessage(message: "Hello", receiverEmail: document["user"]["email"] ?? "", user: document["user"] as Map<String, dynamic>, docId: 'message_start', car: document["car"] as Map<String, dynamic>,).then((value) {
-
                             print("this is messages === ${value}");
-                            if(value){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>DashBoard(pageIndex: 2,), settings: RouteSettings(name: 'messaging')));
-
+                            if (value) {
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) =>
+                                      DashBoard(pageIndex: 2,),
+                                  settings: RouteSettings(name: 'messaging')));
                             }
                           });
                         },

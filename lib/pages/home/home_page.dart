@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         ActivityDetailsCard(title: 'Total Product', value: '$totalCars', icon: 'assets/svg/car.svg'),
                         SizedBox(height: 15,),
-                        ActivityDetailsCard(title: 'Total Rent Request', value: '$totalCarRequest', icon: 'assets/svg/car.svg'),
+                        ActivityDetailsCard(title: 'Total Booking', value: '$totalCarRequest', icon: 'assets/svg/car.svg'),
                         SizedBox(height: 15,),
                         ActivityDetailsCard(title: 'Total Rent Car', value: '$totalRentCar', icon: 'assets/svg/car.svg'),
                         SizedBox(height: 15,),
@@ -166,6 +166,7 @@ class _HomePageState extends State<HomePage> {
                                           DataColumn(label: Text("User name")),
                                           DataColumn(label: Text("Date")),
                                           DataColumn(label: Text("Status")),
+                                          DataColumn(label: Text("Pay Status")),
                                           DataColumn(label: Text("Action")),
                                         ],
                                         rows: data.map<DataRow>((document){
@@ -184,6 +185,14 @@ class _HomePageState extends State<HomePage> {
                                                       borderRadius: BorderRadius.circular(5),
                                                     ),
                                                     child: Text(document['status'], style: TextStyle(color: Colors.white),)
+                                                )),
+                                                DataCell( Container(
+                                                    padding: EdgeInsets.only(left: 10, right: 10, top: 4, bottom: 4),
+                                                    decoration: BoxDecoration(
+                                                      color: document['pay_status'] == "paid" ? Colors.green : Colors.red,
+                                                      borderRadius: BorderRadius.circular(5),
+                                                    ),
+                                                    child: Text(document['pay_status'], style: TextStyle(color: Colors.white),)
                                                 )),
                                                 DataCell(Row(
                                                   children: [

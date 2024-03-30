@@ -27,6 +27,7 @@ dependencies:
   image_picker: ^1.0.4
   intl: ^0.18.1
   dropdown_button2: ^2.1.4
+  full_screen_image: ^2.0.0
 
 dev_dependencies:
   flutter_test:

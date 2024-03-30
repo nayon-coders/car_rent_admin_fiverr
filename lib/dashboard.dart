@@ -35,7 +35,7 @@ class _DashBoardState extends State<DashBoard> {
     MenuModel(icon: 'assets/svg/home.svg', title: "Dashboard"),
     MenuModel(icon: 'assets/svg/car.svg', title: "Car Management"),
     MenuModel(icon: 'assets/svg/message.svg', title: "Message's"),
-    MenuModel(icon: 'assets/svg/request.svg', title: "Rent Request"),
+    MenuModel(icon: 'assets/svg/request.svg', title: "Booking Manage"),
     MenuModel(icon: 'assets/svg/profile.svg', title: "User Management"),
     MenuModel(icon: 'assets/svg/setting.svg', title: "Setting"),
     MenuModel(icon: 'assets/svg/signout.svg', title: "Signout"),

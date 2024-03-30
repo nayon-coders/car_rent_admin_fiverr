@@ -69,38 +69,10 @@ class _MessageBodyState extends State<MessageBody> {
                           }else if(snapshot.hasData) {
                             return  ListView(
                               children: [
-<<<<<<< HEAD
-                                ChatDetailUserInfo(data: snapshot.data!.data()!,),
+                                ChatDetailUserInfo(data: snapshot.data!.data()!),
                                 SizedBox(height: 5,),
-                                // Row(
-                                //   children: [
-                                //     ElevatedButton(
-                                //         style: ButtonStyle(
-                                //             backgroundColor: MaterialStateProperty.all(Colors.green)
-                                //         ),
-                                //         onPressed: () {
-                                //           CarController.changeCarRequestStatus(docId: widget.docIS, carId: snapshot.data!.data()!["car"]["id"], status: "approved", context: context);
-                                //         },
-                                //         child: const Text("Accept the request")
-                                //     ),
-                                //     SizedBox(width: 20,),
-                                //     ElevatedButton(
-                                //         style: ButtonStyle(
-                                //             backgroundColor: MaterialStateProperty.all(Colors.red)
-                                //         ),
-                                //         onPressed: () {
-                                //           CarController.changeCarRequestStatus(docId: widget.docIS, carId: snapshot.data!.data()!["car"]["id"], status: "cancel", context: context);
-                                //         },
-                                //         child: const Text("Cancel the request")
-                                //     )
-                                //   ],
-                                // ),
-                                // SizedBox(height: 5,),
-                                //show request status
 
-=======
-                                ChatDetailUserInfo(user: snapshot.data!.data() as Map<String, dynamic>,),
->>>>>>> 4cb95922c8c2af836dbf1a09d30ff8f853048f11
+                                ChatDetailUserInfo(data: snapshot.data!.data() as Map<String, dynamic>),
                                 SizedBox(height: 5,),
                                 Container(
                                   padding: EdgeInsets.all(10),
@@ -112,7 +84,6 @@ class _MessageBodyState extends State<MessageBody> {
                                       color: Colors.grey.shade900,
                                       borderRadius: BorderRadius.circular(10)
                                   ),
-<<<<<<< HEAD
                                   child:  ListView.builder(
                                     controller: _controller,
                                     itemCount: snapshot.data!.data()!["message"].length,
@@ -226,18 +197,18 @@ class _MessageBodyState extends State<MessageBody> {
                                       SizedBox(width: 10,),
                                       InkWell(
                                         onTap: ()async{
-                                          await MessagingController.sendMessage(
-                                              message: _messageController.text,
-                                              receiverEmail: snapshot.data!.data()!["user"]["email"],
-                                              user: snapshot.data!.data()!["user"],
-                                              docId: widget.docIS,
-                                              car: snapshot.data!.data()!["car"]
-                                          ).then((value) {
-                                            _messageController.clear();
-                                            print("Message sent");
-                                            _controller.jumpTo(_controller.position.maxScrollExtent);
-                                          });
-=======
+                                        await MessagingController.sendMessage(
+                                        message: _messageController.text,
+                                        receiverEmail: snapshot.data!.data()!["user"]["email"],
+                                        user: snapshot.data!.data()!["user"],
+                                        docId: widget.docIS,
+                                        car: snapshot.data!.data()!["car"]
+                                        ).then((value) {
+                                        _messageController.clear();
+                                        print("Message sent");
+                                        _controller.jumpTo(_controller.position.maxScrollExtent);
+                                        });
+                                        },
                                   child: Column(
                                     children: [
                                       Expanded(
@@ -377,7 +348,6 @@ class _MessageBodyState extends State<MessageBody> {
                                                   print("Message sent");
                                                   _controller.jumpTo(_controller.position.maxScrollExtent);
                                                 });
->>>>>>> 4cb95922c8c2af836dbf1a09d30ff8f853048f11
 
                                         },
                                         child: CircleAvatar(
@@ -390,7 +360,12 @@ class _MessageBodyState extends State<MessageBody> {
                                   ),
                                 )
                               ],
-                            );
+                            )
+                      )
+                      ]
+                      )
+                      )
+                      ]);
                           }else {
                             return Center(child: Text("No message found"),);
                           }

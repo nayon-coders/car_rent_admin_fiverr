@@ -47,7 +47,8 @@ class _RentRequestState extends State<RentRequest> {
     );
     return Scaffold(
       appBar: AppBar(
-        title: Text('Rent Request', style: TextStyle(fontSize: 16),),
+        centerTitle: false,
+        title: Text('Booking List', style: TextStyle(fontSize: 16),),
       ),
       body: SizedBox(
           height: MediaQuery.of(context).size.height,
@@ -191,6 +192,7 @@ class _RentRequestState extends State<RentRequest> {
                                           DataColumn(label: Text("User name")),
                                           DataColumn(label: Text("Date")),
                                           DataColumn(label: Text("Status")),
+                                          DataColumn(label: Text("Pay Status")),
                                           DataColumn(label: Text("Action")),
                                         ],
                                         rows: data.map<DataRow>((document){
@@ -209,6 +211,14 @@ class _RentRequestState extends State<RentRequest> {
                                                       borderRadius: BorderRadius.circular(5),
                                                     ),
                                                     child: Text(document['status'], style: TextStyle(color: Colors.white),)
+                                                )),
+                                                DataCell( Container(
+                                                    padding: EdgeInsets.only(left: 10, right: 10, top: 4, bottom: 4),
+                                                    decoration: BoxDecoration(
+                                                      color: document['pay_status'] == "paid" ? Colors.green : Colors.red,
+                                                      borderRadius: BorderRadius.circular(5),
+                                                    ),
+                                                    child: Text(document['pay_status'], style: TextStyle(color: Colors.white),)
                                                 )),
                                                 DataCell(Row(
                                                   children: [

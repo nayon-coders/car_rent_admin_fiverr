@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dashboard/dashboard.dart';
 import 'package:flutter_dashboard/firebase/car_controller/car_controller.dart';
 import 'package:flutter_dashboard/widgets/app_network_image.dart';
-
+import 'package:full_screen_image/full_screen_image.dart';
 import '../../../firebase/messaging_controller.dart';
 
 Future<void> showRentRequestInfo({required BuildContext context, required DocumentSnapshot document}) async {
@@ -32,11 +32,23 @@ Future<void> showRentRequestInfo({required BuildContext context, required Docume
                             ),
                           ),
                           SizedBox(height: 10,),
-                          AppNetworkImage(imageUrl: document['user']["image"] ?? "", height: 200, width: 200),
+                          AppNetworkImage(imageUrl: document['user']["image"] ?? "", height: 100, width: 100),
                           SizedBox(height: 10,),
                           Text('Name: ${document["user"]['name'] ?? ""}'),
                           SizedBox(height: 5,),
                           Text('Email: ${document["user"]['email'] ?? ""}'),
+                          SizedBox(height: 5,),
+                          const Text('Driving License:'),
+                          SizedBox(height: 5,),
+                          FullScreenWidget(
+                            disposeLevel: DisposeLevel.High,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: AppNetworkImage(imageUrl: document['user']["license"] ?? "", height: 200, width: 200),
+                            ),
+                          )
+
+
 
                         ],
                       ),

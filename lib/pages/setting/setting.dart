@@ -50,6 +50,8 @@ class _SettingState extends State<Setting> {
     );
     return Scaffold(
       appBar: AppBar(
+        centerTitle: false,
+
         title: Text('Setting', style: TextStyle(fontSize: 16),),
       ),
       body: SizedBox(

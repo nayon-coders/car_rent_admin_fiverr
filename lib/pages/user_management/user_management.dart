@@ -32,6 +32,7 @@ class _UserManagementState extends State<UserManagement> {
     );
     return Scaffold(
       appBar: AppBar(
+        centerTitle: false,
         title: const Text('User Management', style: TextStyle(color: Colors.white, fontSize: 16)),
       ),
       body: SizedBox(
